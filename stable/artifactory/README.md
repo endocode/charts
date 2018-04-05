@@ -60,6 +60,25 @@ $ helm install --name artifactory \
 ```
 Get more details on configuring Artifactory in the [official documentation](https://www.jfrog.com/confluence/).
 
+#### Install Artifactory Pro license
+For activating Artifactory Pro, you must install an appropriate license. There are two ways to manage the license. **Artifactory UI** or a **Kubernetes Secret**.
+The easier and recommended way is the **Artifactory UI**. Using the **Kubernetes Secret** is for advanced users and is better suited for automation.
+**IMPORTANT:** You should use only one of the following methods. Switching between them while a cluster is running might disable your Artifactory!
+
+##### Artifactory UI
+Once primary cluster is running, open Artifactory UI and insert the license(s) in the UI.
+
+##### Kubernetes Secret
+You can deploy the Artifactory license(s) as a [Kubernetes secret](https://kubernetes.io/docs/concepts/configuration/secret/).
+Prepare a text file with the license(s) written in it. If writing multiple licenses, it's important to put **two new lines between each license block**!
+```bash
+# Create the Kubernetes secret (assuming the local license file is 'art.lic')
+$ kubectl create secret generic artifactory-cluster-license --from-file=./art.lic
+
+# Pass the license to helm
+$ helm install --name artifactory-ha --set artifactory.license.secret=artifactory-cluster-license,artifactory.license.dataKey=art.lic stable/artifactory
+```
+**NOTE:** You have to keep passing the license secret parameters as `--set artifactory.license.secret=artifactory-cluster-license,artifactory.license.dataKey=art.lic` on all future calls to `helm install` and `helm upgrade`!
 
 ### Customizing Database password
 You can override the specified database password (set in [values.yaml](values.yaml)), by passing it as a parameter in the install command line

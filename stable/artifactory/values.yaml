@@ -33,6 +33,15 @@ artifactory:
     repository: "docker.bintray.io/jfrog/artifactory-pro"
     version: 5.9.1
     pullPolicy: IfNotPresent
+  
+  ## Artifactory license secret.
+  ## If artifactory.license.secret is passed, it will be mounted as
+  ## ARTIFACTORY_HOME/etc/artifactory.cluster.license and loaded at run time.
+  ## The dataKey should be the name of the secret data key created.
+  license:
+    secret:
+    dataKey:
+    
   service:
     name: artifactory
     type: ClusterIP

@@ -71,6 +71,11 @@ spec:
         volumeMounts:
         - name: artifactory-volume
           mountPath: {{ .Values.artifactory.persistence.mountPath | quote }}
+        {{- if .Values.artifactory.license.secret }}
+        - name: artifactory-license
+          mountPath: "/artifactory_extra_conf/artifactory.license"
+          subPath: {{ .Values.artifactory.license.dataKey }}
+        {{- end }}
         resources:
 {{ toYaml .Values.artifactory.resources | indent 10 }}
         readinessProbe:
@@ -94,3 +99,8 @@ spec:
       {{- else }}
         emptyDir: {}
       {{- end -}}
+      {{- if .Values.artifactory.license.secret }}
+      - name: artifactory-license
+        secret:
+          secretName: {{ .Values.artifactory.license.secret }}
+      {{- end }}

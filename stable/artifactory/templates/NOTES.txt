@@ -30,3 +30,11 @@ Congratulations. You have just deployed JFrog Artifactory Pro!
    Default credential for Artifactory:
    user: admin
    password: password
+
+
+  {{- if .Values.artifactory.license.secret }}
+
+3. Manage Artifactory license through the {{ .Values.artifactory.license.secret }} secret ONLY!
+   Since the artifactory license(s) is managed with a secret ({{ .Values.artifactory.license.secret }}), any change through the Artifactory UI might not be saved!
+  
+  {{- end }}
